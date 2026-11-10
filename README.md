@@ -78,7 +78,17 @@ No suba el archivo `.env`: ya está excluido mediante `.gitignore`. El archivo v
 
 ## 2. Ejecutar los dos contenedores
 
-En Windows PowerShell:
+Primero abra Docker Desktop y espere a que el motor esté en ejecución. Después, ubique la terminal dentro de la carpeta del proyecto.
+
+En **Windows CMD (Símbolo del sistema)**:
+
+```bat
+copy .env.example .env
+docker compose up --build -d
+docker compose ps
+```
+
+En **Windows PowerShell**:
 
 ```powershell
 Copy-Item .env.example .env
@@ -86,7 +96,7 @@ docker compose up --build -d
 docker compose ps
 ```
 
-En Linux o macOS:
+En **Linux o macOS**:
 
 ```bash
 cp .env.example .env
@@ -105,7 +115,7 @@ El contenedor `api` inicia después de que MySQL supere su verificación de salu
 
 Abra `http://localhost:3000/health`. La respuesta debe contener `"status":"ok"`, `"host":"db"` y `"connection_test":1`. Esta consulta demuestra que la API ejecutó `SELECT 1` en MySQL a través de la red interna.
 
-Desde PowerShell también puede usar:
+Desde CMD o PowerShell también puede usar:
 
 ```powershell
 curl.exe http://localhost:3000/health
@@ -141,6 +151,12 @@ El resultado final esperado es: `RESULTADO: verificación integral exitosa`.
 | POST | `/api/tasks` | Crear una tarea |
 | PATCH | `/api/tasks/:id` | Actualizar campos de una tarea |
 | DELETE | `/api/tasks/:id` | Eliminar una tarea |
+
+Ejemplo de creación en CMD, escrito en una sola línea:
+
+```bat
+curl.exe -X POST http://localhost:3000/api/tasks -H "Content-Type: application/json" -d "{\"title\":\"Validar evidencias\",\"description\":\"Revisar capturas de GitHub y Docker\",\"status\":\"pendiente\",\"priority\":\"alta\"}"
+```
 
 Ejemplo de creación en PowerShell:
 
@@ -181,6 +197,18 @@ docker compose down -v
 ```
 
 Si cambia las credenciales en `.env`, ejecute `docker compose down -v` antes de reiniciar únicamente cuando acepte eliminar los datos locales anteriores. Las variables de inicialización de MySQL solo se aplican cuando el volumen está vacío.
+
+### Si una construcción anterior falló
+
+Cuando sustituya una versión anterior del proyecto, fuerce una construcción limpia de la API y vuelva a iniciar los servicios:
+
+```bat
+docker compose build --no-cache api
+docker compose up -d
+docker compose ps
+```
+
+No es necesario eliminar el volumen de MySQL ni usar `down -v` para actualizar la imagen de la API.
 
 ## 7. Pruebas unitarias sin Docker
 
