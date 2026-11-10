@@ -1,0 +1,23 @@
+{
+  "name": "gestion-tareas-grupo5",
+  "version": "1.0.0",
+  "description": "API REST de gestión de tareas para la entrega 1 de Integración Continua - Grupo 5",
+  "private": true,
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test",
+    "verify:integration": "node scripts/verificar.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mysql2": "^3.15.3"
+  },
+  "license": "MIT"
+}
